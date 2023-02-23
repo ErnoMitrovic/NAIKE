@@ -1,0 +1,43 @@
+body{
+    margin: 0;
+}
+
+p{
+    background-color: aliceblue;
+}
+
+#root{
+    /* DIMENSIONS */
+    width: 100dvw;
+    height: 100dvh;
+
+    /* COLOR */
+    background-color: #8f8f8f;
+
+    /* CENTERING ELEMENTS */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#center{
+    /* DIMENSIONS */
+    width: 50dvw;
+    height: 50dvh;
+
+    /* COLOR */
+    background-color: black;
+
+    /* CENTERING ELEMENTS */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#image-generated{
+    /* DIMENSIONS */
+    width: 15dvw;
+    margin-bottom: 2dvh;
+}
