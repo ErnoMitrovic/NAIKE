@@ -4,11 +4,11 @@ import cors from 'cors'
 import { Configuration, OpenAIApi } from 'openai'
 
 dotenv.config({
-    path: "/Users/moymac/Library/Mobile\ Documents/com~apple~CloudDocs/Desktop/TEC\(CLOUD\)/ITC4/NAIKE/.env"
+    path: "../.env"
 })
 
 const configuration = new Configuration({
-    apiKey: "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"
+    apiKey: process.env.API_KEY
 })
 
 const openai = new OpenAIApi(configuration)

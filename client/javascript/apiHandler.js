@@ -1,4 +1,7 @@
 async function buttonHandle(){
+    const text = document.getElementById('input-text').value
+    
+    var image = document.getElementById('image-generated')
     response = await fetch('http://localhost:3000', {
         method: 'POST',
         headers: {
@@ -6,9 +9,9 @@ async function buttonHandle(){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            'prompt': 'dog' 
+            prompt: text
         })
     })
     .then(response => response.json())
-    .then(response => console.log(JSON.stringify(response)))
+    .then(response => image.setAttribute('src', response.message))
 }
