@@ -1,30 +1,33 @@
+// Author: Moisés Adame-Aguilar
+// Date: February 24, 2023
+// Description: ExpressJS server for post requests  
+// regarding the creation or the editing of an image.
+
 import express from "express"
 import * as dotenv from 'dotenv'
 import cors from 'cors'
 import * as fs from 'fs';
 import { Configuration, OpenAIApi } from 'openai'
 
+// Path for the Api Key.
 dotenv.config({
     path: "../.env"
 })
 
+// Configuration for the api with the Api Key.
 const configuration = new Configuration({
     apiKey: process.env.API_KEY
 })
 
+// Defining the Api.
 const openai = new OpenAIApi(configuration)
 
+// Instantiating the expressJS app.
 const app = express()
-
 app.use(cors())
 app.use(express.json())
 
-app.get('/', async (req, res) => {
-    res.status(200).send({
-        message: 'Hello World',
-    })
-})
-
+// Post request for the creation of an image.
 app.post('/generate', async (req, res) => {
     try{
         const prompt = req.body.prompt
@@ -45,6 +48,7 @@ app.post('/generate', async (req, res) => {
     }
 })
 
+// Post request for editting an image.
 app.post('/edit', async (req, res) => {
     try{
         const prompt = req.body.prompt
@@ -67,4 +71,5 @@ app.post('/edit', async (req, res) => {
     }
 })
 
+// The server is listening on port 3000
 app.listen(3000, () => {console.log('Server runing on: http://localhost:3000')})
