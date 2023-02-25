@@ -1,6 +1,7 @@
 import express from "express"
 import * as dotenv from 'dotenv'
 import cors from 'cors'
+import * as fs from 'fs';
 import { Configuration, OpenAIApi } from 'openai'
 
 dotenv.config({
@@ -24,7 +25,7 @@ app.get('/', async (req, res) => {
     })
 })
 
-app.post('/', async (req, res) => {
+app.post('/generate', async (req, res) => {
     try{
         const prompt = req.body.prompt
         const response = await openai.createImage({
@@ -32,6 +33,28 @@ app.post('/', async (req, res) => {
             n: 1,
             size: "1024x1024",
         })
+
+        res.status(200).send({
+            message: response.data.data[0].url,
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).send({
+            error
+        })
+    }
+})
+
+app.post('/edit', async (req, res) => {
+    try{
+        const prompt = req.body.prompt
+        const response = await openai.createImageEdit(
+            fs.createReadStream("imgs/original.png"),
+            fs.createReadStream("imgs/mask.png"),
+            prompt,
+            1,
+            "1024x1024"
+        )
 
         res.status(200).send({
             message: response.data.data[0].url,
