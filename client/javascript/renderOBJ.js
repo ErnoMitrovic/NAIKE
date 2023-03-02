@@ -4,40 +4,11 @@
 // Adding 3D OBJ to server
 
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 
 const renderer = new THREE.WebGLRenderer();
-let object;
-
-// Rendered texture
-const loadingModel = () =>{
-    object.traverse( (child) => {
-        if(child.isMesh) child.material.map = texture;
-    })
-	scene.add( object );
-}
-
-// Model callbacks
-const onProgress = (xhr) => {
-    if ( xhr.lengthComputable ) {
-
-        const p = document.createElement('p');
-        
-        const percentComplete = xhr.loaded / xhr.total * 100;
-        // console.log( 'model ' + Math.round( percentComplete, 2 ) + '% downloaded' );
-        const node = document.createTextNode('model ' + Math.round( percentComplete, 2 ) + '% downloaded');
-        p.appendChild(node);
-    }
-}
-
-// Needs to be async for texture and object rendering
-const manager = new THREE.LoadingManager(loadingModel);
-const textureLoader = new THREE.TextureLoader(manager);
-const texture = textureLoader.load('../../server/imgs/original.png'); // For debug
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-
-document.body.appendChild(renderer.domElement);
 
 // Scene configs
 const scene = new THREE.Scene();
@@ -48,28 +19,48 @@ camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight
 camera.position.set(0, 2, 200);
 scene.add(camera);
 
-const loader = new GLTFLoader(manager);
+const loader = new OBJLoader();
 loader.load(
-    'C:/Users/ernom/Downloads/6e48z1kc7r40-bugatti/bugatti/bugatti.gltf', 
-    (obj) => { 
-        object = obj 
-        const p = document.createElement('p');
-        const node = document.createTextNode('Success');
-        p.appendChild(node);
+    "../objs/shoe.obj",
+    (obj) => {
+        scene.add(obj)
+        const p = document.createElement('p')
+        const txt = document.createTextNode('Success');
+        p.appendChild(txt);
         document.body.appendChild(p);
     },
-    onProgress,
-    (event) => {
+    (xhr) => {
         const p = document.createElement('p');
-        const node = document.createTextNode(event.message);
-        p.appendChild(node);
+        const txt = document.createTextNode((xhr.loaded / xhr.total * 100 ) + '% loaded');
+        p.appendChild(txt);
+        document.body.appendChild(p);
+    },
+    (error) => {
+        const p = document.createElement('p')
+        const txt = document.createTextNode(error.message);
+        p.appendChild(txt);
         document.body.appendChild(p);
     }
-);
+    );
 
-const boxGeometry = new THREE.BoxGeometry(40, 40, 40);
-const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+const texture = new THREE.TextureLoader().load('./img.jpg',
+(t) => {
+    texture = t;
+    const p = document.createElement('p')
+    const txt = document.createTextNode('Success texture');
+    p.appendChild(txt);
+    document.body.appendChild(p);
+}, undefined, (error) => {
+    const p = document.createElement('p')
+    const txt = document.createTextNode('Could not load texture ' + error.message);
+    p.appendChild(txt);
+    document.body.appendChild(p);
+});
+const boxGeometry = new THREE.BoxGeometry(20, 20, 20);
+const boxMaterial = new THREE.MeshBasicMaterial({map: texture});
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
 scene.add(box);
 
 renderer.render(scene, camera);
+
+document.body.appendChild(renderer.domElement);
