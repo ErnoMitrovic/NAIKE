@@ -4,7 +4,7 @@
 // Adding 3D OBJ to server
 
 import * as THREE from 'three'
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const renderer = new THREE.WebGLRenderer();
 let object;
@@ -48,9 +48,9 @@ camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight
 camera.position.set(0, 2, 200);
 scene.add(camera);
 
-const loader = new OBJLoader(manager);
+const loader = new GLTFLoader(manager);
 loader.load(
-    'C:/Users/ernom/Desktop/repos/hackathones/NAIKE/client/objs/shoe.obj', 
+    'C:/Users/ernom/Downloads/6e48z1kc7r40-bugatti/bugatti/bugatti.gltf', 
     (obj) => { 
         object = obj 
         const p = document.createElement('p');
